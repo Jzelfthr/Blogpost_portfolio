@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Pulse of Intelligence: Tuning the Learning Rate Within a Neural Mind</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="title">The Pulse of Intelligence:<br> 
+        <span class="subtitle">Tuning the Learning Rate Within a Neural Mind</span>
+    </h1>
+
+    <hr>
+
+    <h2 id="introduction">🔍 Introduction</h2>
+    <p>
+        Deep learning models learn not in silence, but in rhythm—adjusting their internal
+        state beat by beat as gradients flow through their layers.
+        Among all the knobs we tune as practitioners, the <strong>learning rate</strong> is the one
+        that most closely resembles a pulse: too faint, and the model barely learns;
+        too violent, and it spirals into chaos.
+    </p>
+
+    <p>
+        This blog explores how the learning rate shapes a neural network’s journey across 
+        its loss landscape, guiding it—step by step—toward understanding.
+    </p>
+
+    <hr>
+
+    <h2 id="what-is">📘 Part 1 — What Is Learning Rate?</h2>
+
+    <p>
+        The <strong>learning rate (α)</strong> controls how large each update step is when a 
+        neural network adjusts its weights during backpropagation. It is a deep learning 
+        hyperparameter that governs the very <em>pace</em> at which a network learns.
+    </p>
+
+    <pre class="code-block">
+w(t+1) = w(t) − α ∇L(w(t))
+    </pre>
+
+    <p>
+        Each component influences learning:
+    </p>
+
+    <ul>
+        <li><strong>w(t)</strong> — weights at time step t</li>
+        <li><strong>α</strong> — the learning rate</li>
+        <li><strong>∇L</strong> — the gradient of loss</li>
+    </ul>
+
+    <p>
+        With a small learning rate, the model learns slowly and safely.  
+        With a large one, the model learns boldly—but sometimes recklessly.
+    </p>
+
+    <hr>
+
+    <h2 id="experiment">🧪 Part 2 — Experiment: Learning Rate in Action</h2>
+
+    <p>To visualize the effect of learning rate, we train a small CNN on MNIST.</p>
+
+    <ul>
+        <li><strong>Dataset:</strong> MNIST</li>
+        <li><strong>Model:</strong> Simple CNN</li>
+        <li><strong>Optimizer:</strong> Adam</li>
+        <li><strong>Learning Rates Tested:</strong> 0.0001, 0.001, 0.01</li>
+    </ul>
+
+    <pre class="code-block">
+# Training code (PyTorch)
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+
+transform = transforms.Compose([transforms.ToTensor()])
+
+train_data = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
+test_data = datasets.MNIST(root='./data', train=False, download=True, transform=transform)
+
+train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=64, shuffle=False)
+
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(1, 32, 3), nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(32, 64, 3), nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        self.fc = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(64*5*5, 128),
+            nn.ReLU(),
+            nn.Linear(128, 10)
+        )
+
+    def forward(self, x):
+        return self.fc(self.conv(x))
+
+def train_model(lr):
+    model = SimpleCNN()
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+
+    losses = []
+    for epoch in range(5):
+        total_loss = 0
+        for images, labels in train_loader:
+            optimizer.zero_grad()
+            outputs = model(images)
+            loss = loss_fn(outputs, labels)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+
+        losses.append(total_loss/len(train_loader))
+    return losses
+
+learning_rates = [0.0001, 0.001, 0.01]
+results = {}
+
+for lr in learning_rates:
+    results[lr] = train_model(lr)
+
+plt.figure(figsize=(10,6))
+for lr in learning_rates:
+    plt.plot(results[lr], label=f"lr={lr}")
+
+plt.legend()
+plt.xlabel("Epoch")
+plt.ylabel("Training Loss")
+plt.title("Learning Rate Effects on CNN Training")
+plt.grid()
+plt.show()
+    </pre>
+
+    <hr>
+
+    <h2 id="results">📊 Part 3 — Observations</h2>
+
+    <p><strong>LR = 0.0001</strong>  
+    The network learns gently—too gently. It converges slowly, tracing a careful but inefficient path.</p>
+
+    <p><strong>LR = 0.001</strong>  
+    A balanced pulse. A stable heartbeat. Convergence is smooth and efficient.</p>
+
+    <p><strong>LR = 0.01</strong>  
+    The model becomes erratic—the steps are too large, causing chaotic jumps across the loss landscape.</p>
+
+    <h3>💡 Insights</h3>
+
+    <ul>
+        <li>Learning rate is a hyperparameter with dramatic influence.</li>
+        <li>Even a good optimizer like Adam fails with a bad LR.</li>
+        <li>Balanced learning rate = faster and more stable training.</li>
+        <li>Scheduling or warmup further enhances performance in real-world tasks.</li>
+    </ul>
+
+    <hr>
+
+    <h2 id="conclusion">📝 Conclusion</h2>
+
+    <p>
+        The learning rate is more than a number—it is the pulse that drives a neural network’s growth.
+        Too slow, and the mind never awakens. Too fast, and it loses itself in noise.
+    </p>
+
+    <p>
+        Through experiments and theory, we see that tuning this single hyperparameter can reshape the entire trajectory of learning.
+        In the neural landscape, step size is destiny.
+    </p>
+
+    <hr>
+
+    <h2 id="references">🌐 References</h2>
+    <ul>
+        <li>Goodfellow, Bengio, & Courville — <i>Deep Learning</i></li>
+        <li>PyTorch Documentation</li>
+        <li>Stanford CS231n</li>
+    </ul>
+
+</div>
+
+<script src="../js/scripts.js"></script>
+
+</body>
+</html>
