@@ -1,51 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Jezzel Faith Gier — Deep Learning Portfolio</title>
-<link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pulse of Intelligence: Tuning the Learning Rate Within a Neural Mind</title>
+<style>
+  /* ===== Reset & Base ===== */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Helvetica', sans-serif; line-height: 1.6; background: linear-gradient(180deg,#05060a,#080812); color: #e6eef8; }
+  a { color: #6ca0f6; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img { max-width: 100%; height: auto; }
+
+  /* ===== Layout ===== */
+  header { padding: 2rem; text-align: center; }
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  h2, h3 { margin-top: 1.5rem; margin-bottom: 0.5rem; }
+  main { display: flex; flex-direction: row; max-width: 1200px; margin: 0 auto; padding: 2rem; gap: 2rem; }
+  article { flex: 3; }
+  aside { flex: 1; position: sticky; top: 2rem; background: rgba(5,6,10,0.95); padding: 1rem; border-radius: 12px; max-height: 80vh; overflow-y: auto; }
+
+  /* ===== TOC ===== */
+  .toc { list-style: none; }
+  .toc a.active { font-weight: bold; color: #f1c40f; }
+
+  /* ===== Code Blocks ===== */
+  pre { background: #111; padding: 1rem; border-radius: 8px; margin: 1rem 0; overflow-x: auto; cursor: pointer; }
+  pre.collapsed { max-height: 2.5rem; overflow: hidden; cursor: pointer; }
+  pre code { color: #e6eef8; }
+
+  /* ===== Buttons ===== */
+  button { padding: 0.5rem 1rem; margin: 0.5rem 0; border: none; border-radius: 8px; cursor: pointer; background: #222; color: #e6eef8; }
+  button:hover { background: #444; }
+
+  /* ===== Images ===== */
+  .plot { text-align: center; margin: 1rem 0; }
+</style>
 </head>
 <body>
-<div class="site-wrapper">
-<header class="site-header">
-<div class="brand">
-<div class="logo-mini" aria-hidden></div>
-<div>
-<h1>Jezzel Faith Gier</h1>
-<p class="tag">Deep Learning Portfolio</p>
-</div>
-</div>
-<nav>
-<a href="index.html">Home</a>
-<a href="posts/pulse-of-intelligence.html">The Pulse of Intelligence</a>
-</nav>
+
+<header>
+  <h1>The Pulse of Intelligence: Tuning the Learning Rate Within a Neural Mind</h1>
+  <p>Exploring how learning rate shapes the journey of a neural network</p>
 </header>
 
+<main>
+  <article>
+    <!-- Section 1 -->
+    <section id="concept">
+      <h2>1. Understanding Learning Rate</h2>
+      <p>The <strong>learning rate</strong> is a hyperparameter that controls how much a neural network updates its weights during training. It determines the step size in gradient descent:</p>
+      <pre><code>θ = θ - η * ∇L(θ)</code></pre>
+      <p>Where θ are weights, η is the learning rate, and ∇L(θ) is the gradient of the loss.</p>
+      <p>The learning rate affects:</p>
+      <ul>
+        <li>Convergence speed</li>
+        <li>Model stability</li>
+        <li>Generalization ability</li>
+      </ul>
+    </section>
 
-<main class="home-main">
-<section class="hero">
-<h2>The Pulse of Intelligence</h2>
-<p class="hero-sub">Tuning the Learning Rate Within a Neural Mind — portfolio article by Jezzel Faith Gier</p>
-<a class="cta" href="posts/pulse-of-intelligence.html">Read the full article</a>
-</section>
+    <!-- Section 2 -->
+    <section id="experiment">
+      <h2>2. Experimenting with Learning Rate</h2>
+      <p>We use a small MLP on the MNIST dataset. Three learning rates were tested: <code>0.001</code>, <code>0.01</code>, <code>0.1</code>.</p>
+      <pre data-collapsible><code># Sample PyTorch code
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
+model = nn.Sequential(nn.Flatten(), nn.Linear(28*28, 128), nn.ReLU(), nn.Linear(128,10))
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.01)  # change lr
+</code></pre>
+      <div class="plot">
+        <img src="assets/plots/lr-loss-placeholder.png" alt="Learning rate loss curves">
+        <p>Figure 1: Loss curves for different learning rates</p>
+      </div>
+    </section>
 
-<section class="posts">
-<h3>Featured</h3>
-<ul>
-<li><a href="posts/pulse-of-intelligence.html">The Pulse of Intelligence — Learning Rate Exploration</a></li>
-</ul>
-</section>
+    <!-- Section 3 -->
+    <section id="analysis">
+      <h2>3. Analysis and Insights</h2>
+      <p>Observations:</p>
+      <ul>
+        <li><strong>Low learning rate (0.001)</strong>: slow convergence, stable but longer training.</li>
+        <li><strong>Medium learning rate (0.01)</strong>: good balance of speed and stability.</li>
+        <li><strong>High learning rate (0.1)</strong>: fast but unstable, may overshoot minima.</li>
+      </ul>
+      <p>Insight: Start with moderate learning rates and tune using learning rate scheduling or adaptive optimizers (Adam, RMSProp) for better performance.</p>
+    </section>
+  </article>
+
+  <aside>
+    <h3>Table of Contents</h3>
+    <ul class="toc">
+      <li><a href="#concept">1. Understanding Learning Rate</a></li>
+      <li><a href="#experiment">2. Experimenting with Learning Rate</a></li>
+      <li><a href="#analysis">3. Analysis and Insights</a></li>
+    </ul>
+    <button id="toggleCode">Toggle All Code</button>
+    <button id="toggleTheme">Light Mode</button>
+  </aside>
 </main>
 
+<script>
+/* ===== main.js functionality embedded ===== */
 
-<footer class="site-footer">
-<p>© 2025 Jezzel Faith Gier — Deep Learning Portfolio</p>
-</footer>
-</div>
+// Smooth scroll for TOC links
+document.querySelectorAll('.toc a').forEach(a => {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
 
+// Scroll spy
+(function() {
+  const sections = document.querySelectorAll('article section[id]');
+  const tocLinks = document.querySelectorAll('.toc a');
+  if (!sections.length || !tocLinks.length) return;
+  function onScrollSpy() {
+    let current = sections[0].id;
+    const offset = window.innerHeight * 0.25;
+    sections.forEach(sec => {
+      const top = sec.getBoundingClientRect().top;
+      if (top - offset <= 0) current = sec.id;
+    });
+    tocLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', onScrollSpy, { passive: true });
+  onScrollSpy();
+})();
 
-<script src="js/main.js"></script>
+// Collapsible code blocks
+(function() {
+  const collapsibles = document.querySelectorAll('[data-collapsible]');
+  if (!collapsibles.length) return;
+  collapsibles.forEach(block => block.addEventListener('click', () => block.classList.toggle('collapsed')));
+  window.addEventListener('load', () => collapsibles.forEach(block => block.classList.add('collapsed')));
+  const toggleCodeBtn = document.getElementById('toggleCode');
+  if (toggleCodeBtn) {
+    let collapsed = true;
+    toggleCodeBtn.addEventListener('click', () => {
+      collapsed = !collapsed;
+      collapsibles.forEach(block => block.classList.toggle('collapsed', collapsed));
+    });
+  }
+})();
+
+// Theme toggle
+(function() {
+  const toggleTheme = document.getElementById('toggleTheme');
+  if (!toggleTheme) return;
+  let light = false;
+  toggleTheme.addEventListener('click', () => {
+    light = !light;
+    if (light) {
+      document.body.style.background = 'linear-gradient(180deg,#fbfbff,#f0f4ff)';
+      document.body.style.color = '#021026';
+      toggleTheme.textContent = 'Dark Mode';
+    } else {
+      document.body.style.background = 'linear-gradient(180deg,#05060a,#080812)';
+      document.body.style.color = '#e6eef8';
+      toggleTheme.textContent = 'Light Mode';
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
